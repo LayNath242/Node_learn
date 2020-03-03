@@ -3,20 +3,20 @@ const mongoose = require('mongoose');
 const StaffShema = mongoose.Schema({
     firstname: {
         type: String,
-        required: [true, 'Please add a name'],
+        required: [true, 'Please add a first name'],
         trim: true,
         maxlength: [32, 'Name can not be more than 32 characters']
     },
     lastname: {
         type: String,
-        required: [true, 'Please add a name'],
+        required: [true, 'Please add a last name'],
         trim: true,
         maxlength: [32, 'Name can not be more than 32 characters']
     },
     slug: String,
     positions: {
         type: String,
-        required: [true, 'Please add a name'],
+        required: [true, 'Please add your positions'],
         maxlength: [52, 'Name can not be more than 52 characters']
     },
     startedAt: {
@@ -42,8 +42,7 @@ const StaffShema = mongoose.Schema({
         ]
     },
     address: {
-        type: String,
-        required: [true, 'Please add an address']
+        type: String
     },
     coverImage: {
         type: String,
