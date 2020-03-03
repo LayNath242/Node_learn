@@ -1,0 +1,11 @@
+{
+  "name": "yeak",
+  "version": "1.0.0",
+  "description": "this app is use to show all my own thing",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Lay Nath",
+  "license": "MIT"
+}
