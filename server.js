@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const colors = require('colors');
 
 const connectDB = require('./config/db');
+const staffs = require('./router/staff');
 
 const app = express();
 
@@ -16,6 +17,8 @@ if (process.env.NODE_ENV == 'development') {
 } // dev logging middleware
 
 connectDB();
+
+app.use('/api/v1/staff', staffs); //mount route
 
 const PORT = process.env.PORT || 8000;
 

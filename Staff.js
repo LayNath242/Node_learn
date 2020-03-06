@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const timeZone = require('mongoose-timezone');
 
 const StaffShema = mongoose.Schema(
     {
@@ -25,7 +26,7 @@ const StaffShema = mongoose.Schema(
             required: [true, 'Please fill your date you start work']
         },
         gender: {
-            type: [String],
+            type: String,
             enum: ['M', 'F']
         },
         dateOfBirth: {
@@ -37,6 +38,7 @@ const StaffShema = mongoose.Schema(
         },
         email: {
             type: String,
+            unique: true,
             match: [
                 /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                 'Please add a valid email'
@@ -53,8 +55,13 @@ const StaffShema = mongoose.Schema(
             type: Date,
             default: Date.now
         }
+        // updatedAt: {
+        //     type: Date,
+        //     default: Date.now
+        // }
     },
     { timestamps: { updatedAt: 'updatedAt' } }
 );
 
+StaffShema.plugin(timeZone, { paths: 'createdAt' });
 module.exports = mongoose.model('Staff', StaffShema);
