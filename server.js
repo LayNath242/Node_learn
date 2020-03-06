@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
 
+const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
 const staffs = require('./router/staff');
 
@@ -19,6 +20,7 @@ if (process.env.NODE_ENV == 'development') {
 connectDB();
 
 app.use('/api/v1/staff', staffs); //mount route
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 8000;
 

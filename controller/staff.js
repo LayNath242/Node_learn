@@ -1,4 +1,5 @@
 const Staff = require('../models/Staff');
+const ErrorResponse = require('../utils/errorResponse');
 
 //------------------------------------------------------------------------
 exports.createStaff = async (req, res, next) => {
@@ -34,11 +35,16 @@ exports.getStaff = async (req, res, next) => {
     try {
         const staff = await Staff.findById(req.params.id);
         if (!staff) {
-            res.status(400).json({ success: false });
+            return new ErrorResponse(
+                `Staff not found with id ${req.params.id}`,
+                404
+            );
         }
         res.status(200).json({ success: true, data: staff });
     } catch (error) {
-        res.status(400).json({ success: false });
+        next(
+            new ErrorResponse(`Staff not found with id ${req.params.id}`, 404)
+        );
     }
 };
 
