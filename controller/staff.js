@@ -1,78 +1,58 @@
 const Staff = require('../models/Staff');
 const ErrorResponse = require('../utils/errorResponse');
+const asyncHandler = require('../middleware/async');
 
 //------------------------------------------------------------------------
-exports.createStaff = async (req, res, next) => {
-    try {
-        const staff = await Staff.create(req.body);
-        res.status(201).json({
-            success: true,
-            data: staff
-        });
-    } catch (error) {
-        res.status(400).json({
-            success: false
-        });
-    }
-};
+exports.createStaff = asyncHandler(async (req, res, next) => {
+    const staff = await Staff.create(req.body);
+    res.status(201).json({
+        success: true,
+        data: staff
+    });
+});
 
 //------------------------------------------------------------------------
-exports.getAllStaffs = async (req, res, next) => {
-    try {
-        const staff = await Staff.find();
-        res.status(200).json({
-            success: true,
-            count: staff.length,
-            data: staff
-        });
-    } catch (error) {
-        res.status(400).json({ success: false });
-    }
-};
+exports.getAllStaffs = asyncHandler(async (req, res, next) => {
+    const staff = await Staff.find();
+    res.status(200).json({
+        success: true,
+        count: staff.length,
+        data: staff
+    });
+});
 
 //------------------------------------------------------------------------
-exports.getStaff = async (req, res, next) => {
-    try {
-        const staff = await Staff.findById(req.params.id);
-        if (!staff) {
-            return new ErrorResponse(
-                `Staff not found with id ${req.params.id}`,
-                404
-            );
-        }
-        res.status(200).json({ success: true, data: staff });
-    } catch (error) {
-        next(
-            new ErrorResponse(`Staff not found with id ${req.params.id}`, 404)
+exports.getStaff = asyncHandler(async (req, res, next) => {
+    const staff = await Staff.findById(req.params.id);
+    if (!staff) {
+        return next(
+            new ErrorResponse(`Resourse not found with id ${req.params.id}`, 404)
         );
     }
-};
+    res.status(200).json({ success: true, data: staff });
+});
 
 //------------------------------------------------------------------------
-exports.updateStaff = async (req, res, next) => {
-    try {
-        const staff = await Staff.findByIdAndUpdate(req.params.id, req.body, {
-            new: true,
-            runValidators: true
-        });
-        if (!staff) {
-            res.status(400).json({ success: false });
-        }
-        res.status(200).json({ success: true, data: staff });
-    } catch (error) {
-        res.status(400).json({ success: false });
+exports.updateStaff = asyncHandler(async (req, res, next) => {
+    const staff = await Staff.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+        runValidators: true
+    });
+    if (!staff) {
+        return next(
+            new ErrorResponse(`Resourse not found with id ${req.params.id}`, 404)
+        );
     }
-};
+    res.status(200).json({ success: true, data: staff });
+});
 
 //------------------------------------------------------------------------
-exports.deleteStaff = async (req, res, next) => {
-    try {
-        const staff = await Staff.findByIdAndDelete(req.params.id);
-        if (!staff) {
-            res.status(400).json({ success: false });
-        }
-        res.status(200).json({ success: true, data: {} });
-    } catch (error) {
-        res.status(400).json({ success: false });
+exports.deleteStaff = asyncHandler(async (req, res, next) => {
+    const staff = await Staff.findByIdAndDelete(req.params.id);
+    if (!staff) {
+        return next(
+            new ErrorResponse(`Resourse not found with id ${req.params.id}`, 404)
+        );
     }
-};
+    res.status(200).json({ success: true, data: {} });
+});
