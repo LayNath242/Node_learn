@@ -1,6 +1,7 @@
 const Staff = require('../models/Staff');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
+const geocoder = require('../utils/geocoder');
 
 //------------------------------------------------------------------------
 exports.createStaff = asyncHandler(async (req, res, next) => {
@@ -55,4 +56,28 @@ exports.deleteStaff = asyncHandler(async (req, res, next) => {
         );
     }
     res.status(200).json({ success: true, data: {} });
+});
+
+//------------------------------------------------------------------------
+exports.getStaffInRadius = asyncHandler(async (req, res, next) => {
+    const { zipcode, distance } = req.params;
+
+    // Get lat/lng from geocoder
+    const loc = await geocoder.geocode(zipcode);
+    const lat = loc[0].latitude;
+    const lng = loc[0].longitude;
+
+    // Calc radius using radians
+    // Divide dist by radius of Earth
+    // Earth Radius = 3,963 mi / 6,378 km
+    const radius = distance / 6378;
+    const staffs = await Staff.find({
+        location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } }
+    });
+
+    res.status(200).json({
+        success: true,
+        count: staffs.length,
+        data: staffs
+    });
 });

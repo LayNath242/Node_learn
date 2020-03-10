@@ -5,10 +5,13 @@ const {
     getAllStaffs,
     getStaff,
     updateStaff,
-    deleteStaff
+    deleteStaff,
+    getStaffInRadius
 } = require('../controller/staff');
 
 const router = express.Router();
+
+router.route('/radius/:zipcode/:distance').get(getStaffInRadius);
 
 router
     .route('/')
