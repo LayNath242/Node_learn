@@ -22,6 +22,7 @@ const StaffShema = mongoose.Schema(
             required: [true, 'Please add your positions'],
             maxlength: [52, 'Name can not be more than 52 characters']
         },
+        salary: Number,
         startedAt: {
             type: Date,
             required: [true, 'Please fill your date you start work']
