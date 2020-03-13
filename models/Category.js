@@ -24,6 +24,13 @@ const CategorySchema = mongoose.Schema(
     { timestamps: { updatedAt: 'updatedAt' } }
 );
 
+CategorySchema.pre('remove', async function(next) {
+    await this.model('Post').deleteMany({
+        category: this._id
+    });
+    next();
+});
+
 //revert populate with virtual
 CategorySchema.virtual('post', {
     ref: 'Post',

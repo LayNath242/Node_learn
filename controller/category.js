@@ -72,16 +72,11 @@ exports.getAllCategorys = asyncHandler(async (req, res, next) => {
     });
 });
 
-exports.getCategoryAndPost = asyncHandler(async (req, res, next) => {
-    const category = await Category.find().populate({
+exports.getCategory = asyncHandler(async (req, res, next) => {
+    const category = await Category.findById(req.params.id).populate({
         path: 'post',
         select: 'postTitle postDescription'
     });
-    res.status(200).json({ success: true, data: category });
-});
-
-exports.getCategory = asyncHandler(async (req, res, next) => {
-    const category = await Category.findById(req.params.id);
     if (!category) {
         return next(
             new ErrorResponse(`Resourse not found with id ${req.params.id}`, 404)
@@ -104,11 +99,12 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
 });
 
 exports.deleteCategory = asyncHandler(async (req, res, next) => {
-    const category = await Category.findByIdAndDelete(req.params.id);
+    const category = await Category.findById(req.params.id);
     if (!category) {
         return next(
             new ErrorResponse(`Resourse not found with id ${req.params.id}`, 404)
         );
     }
+    category.remove();
     res.status(200).json({ success: true, data: {} });
 });
