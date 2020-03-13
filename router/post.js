@@ -2,7 +2,7 @@ const express = require('express');
 
 const { createPost, getPosts } = require('../controller/post');
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router
     .route('/')

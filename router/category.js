@@ -8,7 +8,13 @@ const {
     updateCategory
 } = require('../controller/category');
 
-const router = express.Router();
+//include other resource router
+const postRouter = require('./post');
+
+const router = express.Router({ mergeParams: true });
+
+//re-route to other resource router
+router.use('/:categoryId/post', postRouter);
 
 router
     .route('/')

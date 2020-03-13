@@ -12,16 +12,17 @@ exports.createPost = asyncHandler(async (req, res, next) => {
 
 exports.getPosts = asyncHandler(async (req, res, next) => {
     let query;
+
     if (req.params.categoryId) {
         query = Post.find({ category: req.params.categoryId });
     } else {
-        query = Post.find();
+        query = Post.find(req.params.categoryId);
     }
 
-    const post = await query;
-    res.status(200).json({
+    const posts = await query;
+    return res.status(200).json({
         success: true,
-        count: post.length,
-        data: post
+        count: posts.length,
+        data: posts
     });
 });

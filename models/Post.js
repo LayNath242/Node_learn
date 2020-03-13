@@ -11,7 +11,7 @@ const PostSchema = mongoose.Schema({
         required: [true, 'Please add decription for post']
     },
     postImage: [String],
-    categoryId: {
+    category: {
         type: mongoose.Schema.ObjectId,
         ref: 'Category',
         required: true
