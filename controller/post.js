@@ -16,7 +16,10 @@ exports.getPosts = asyncHandler(async (req, res, next) => {
     if (req.params.categoryId) {
         query = Post.find({ category: req.params.categoryId });
     } else {
-        query = Post.find(req.params.categoryId);
+        query = Post.find().populate({
+            path: 'category',
+            select: 'cateName cateDescription'
+        });
     }
 
     const posts = await query;

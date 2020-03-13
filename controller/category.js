@@ -23,8 +23,10 @@ exports.getAllCategorys = asyncHandler(async (req, res, next) => {
 
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
-    query = Category.find(JSON.parse(queryStr));
-
+    query = Category.find(JSON.parse(queryStr)).populate({
+        path: 'post',
+        select: 'postTitle postDescription'
+    });
     if (req.query.select) {
         const fields = req.query.select.split(',').join(' ');
         query = query.select(fields);

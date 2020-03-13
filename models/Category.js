@@ -17,7 +17,19 @@ const CategorySchema = mongoose.Schema(
             default: Date.now
         }
     },
+    {
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true }
+    },
     { timestamps: { updatedAt: 'updatedAt' } }
 );
+
+//revert populate with virtual
+CategorySchema.virtual('post', {
+    ref: 'Post',
+    localField: '_id',
+    foreignField: 'category',
+    justOne: false
+});
 
 module.exports = mongoose.model('Category', CategorySchema);
