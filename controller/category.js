@@ -23,10 +23,7 @@ exports.getAllCategorys = asyncHandler(async (req, res, next) => {
 
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, match => `$${match}`);
 
-    query = Category.find(JSON.parse(queryStr)).populate({
-        path: 'post',
-        select: 'postTitle postDescription'
-    });
+    query = Category.find(JSON.parse(queryStr));
     if (req.query.select) {
         const fields = req.query.select.split(',').join(' ');
         query = query.select(fields);
@@ -73,6 +70,14 @@ exports.getAllCategorys = asyncHandler(async (req, res, next) => {
         pagination,
         data: category
     });
+});
+
+exports.getCategoryAndPost = asyncHandler(async (req, res, next) => {
+    const category = await Category.find().populate({
+        path: 'post',
+        select: 'postTitle postDescription'
+    });
+    res.status(200).json({ success: true, data: category });
 });
 
 exports.getCategory = asyncHandler(async (req, res, next) => {
