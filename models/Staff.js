@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const slugify = require('slugify');
 const geocoder = require('../utils/geocoder');
 
-const StaffShema = mongoose.Schema(
+const StaffSchema = mongoose.Schema(
     {
         firstname: {
             type: String,
@@ -22,6 +22,7 @@ const StaffShema = mongoose.Schema(
             required: [true, 'Please add your positions'],
             maxlength: [52, 'Name can not be more than 52 characters']
         },
+        salary: Number,
         startedAt: {
             type: Date,
             required: [true, 'Please fill your date you start work']
@@ -99,4 +100,4 @@ StaffShema.pre('save', async function(next) {
 
     next();
 });
-module.exports = mongoose.model('Staff', StaffShema);
+module.exports = mongoose.model('Staff', StaffSchema);
