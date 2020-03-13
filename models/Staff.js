@@ -40,6 +40,7 @@ const StaffSchema = mongoose.Schema(
         },
         email: {
             type: String,
+            unique: true,
             match: [
                 /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
                 'Please add a valid email'
@@ -77,12 +78,12 @@ const StaffSchema = mongoose.Schema(
     { timestamps: { updatedAt: 'updatedAt' } }
 );
 
-StaffShema.pre('save', function(next) {
+StaffSchema.pre('save', function(next) {
     this.slug = slugify(this.firstname + this.lastname, { lower: true });
     next();
 });
 
-StaffShema.pre('save', async function(next) {
+StaffSchema.pre('save', async function(next) {
     const loc = await geocoder.geocode(this.address);
     this.location = {
         type: 'Point',

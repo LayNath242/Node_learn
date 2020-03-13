@@ -6,6 +6,8 @@ const colors = require('colors');
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
 const staffs = require('./router/staff');
+const category = require('./router/category');
+const post = require('./router/post');
 
 const app = express();
 
@@ -20,15 +22,16 @@ if (process.env.NODE_ENV == 'development') {
 connectDB();
 
 app.use('/api/v1/staff', staffs); //mount route
+app.use('/api/v1/category', category);
+app.use('/api/v1/post', post);
+
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 8000;
 
 const server = app.listen(
     PORT,
-    console.log(
-        `Server run in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold
-    )
+    console.log(`Server run in ${process.env.NODE_ENV} mode on port ${PORT}`.yellow.bold)
 );
 
 process.on('unhandleRejectio', (err, promise) => {
