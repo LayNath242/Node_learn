@@ -80,9 +80,7 @@ exports.getAllStaffs = asyncHandler(async (req, res, next) => {
 exports.getStaff = asyncHandler(async (req, res, next) => {
     const staff = await Staff.findById(req.params.id);
     if (!staff) {
-        return next(
-            new ErrorResponse(`Resourse not found with id ${req.params.id}`, 404)
-        );
+        return next(new ErrorResponse(`Staff not found with id ${req.params.id}`, 404));
     }
     res.status(200).json({ success: true, data: staff });
 });
@@ -94,9 +92,7 @@ exports.updateStaff = asyncHandler(async (req, res, next) => {
         runValidators: true
     });
     if (!staff) {
-        return next(
-            new ErrorResponse(`Resourse not found with id ${req.params.id}`, 404)
-        );
+        return next(new ErrorResponse(`Staff not found with id ${req.params.id}`, 404));
     }
     res.status(200).json({ success: true, data: staff });
 });
@@ -105,9 +101,7 @@ exports.updateStaff = asyncHandler(async (req, res, next) => {
 exports.deleteStaff = asyncHandler(async (req, res, next) => {
     const staff = await Staff.findByIdAndDelete(req.params.id);
     if (!staff) {
-        return next(
-            new ErrorResponse(`Resourse not found with id ${req.params.id}`, 404)
-        );
+        return next(new ErrorResponse(`Staff not found with id ${req.params.id}`, 404));
     }
     res.status(200).json({ success: true, data: {} });
 });

@@ -79,7 +79,7 @@ exports.getCategory = asyncHandler(async (req, res, next) => {
     });
     if (!category) {
         return next(
-            new ErrorResponse(`Resourse not found with id ${req.params.id}`, 404)
+            new ErrorResponse(`Category not found with id ${req.params.id}`, 404)
         );
     }
     res.status(200).json({ success: true, data: category });
@@ -92,7 +92,7 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
     });
     if (!category) {
         return next(
-            new ErrorResponse(`Resourse not found with id ${req.params.id}`, 404)
+            new ErrorResponse(`Category not found with id ${req.params.id}`, 404)
         );
     }
     res.status(200).json({ success: true, data: category });
@@ -102,7 +102,7 @@ exports.deleteCategory = asyncHandler(async (req, res, next) => {
     const category = await Category.findById(req.params.id);
     if (!category) {
         return next(
-            new ErrorResponse(`Resourse not found with id ${req.params.id}`, 404)
+            new ErrorResponse(`Category not found with id ${req.params.id}`, 404)
         );
     }
     category.remove();
