@@ -6,7 +6,8 @@ const {
     getStaff,
     updateStaff,
     deleteStaff,
-    getStaffInRadius
+    getStaffInRadius,
+    StaffPhotoUpload
 } = require('../controller/staff');
 
 const router = express.Router();
@@ -23,5 +24,7 @@ router
     .get(getStaff)
     .put(updateStaff)
     .delete(deleteStaff);
+
+router.route('/:id/photo').patch(StaffPhotoUpload);
 
 module.exports = router;

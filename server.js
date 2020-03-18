@@ -1,5 +1,8 @@
-const express = require('express');
+const path = require('path');
 const dotenv = require('dotenv');
+
+const express = require('express');
+const fileupload = require('express-fileupload');
 const morgan = require('morgan');
 const colors = require('colors');
 
@@ -21,7 +24,13 @@ if (process.env.NODE_ENV == 'development') {
 
 connectDB();
 
-app.use('/api/v1/staff', staffs); //mount route
+app.use(fileupload());
+
+//static route
+app.use(express.static(path.join(__dirname, 'public')));
+
+//mount route
+app.use('/api/v1/staff', staffs);
 app.use('/api/v1/category', category);
 app.use('/api/v1/post', post);
 

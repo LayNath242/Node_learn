@@ -1,6 +1,13 @@
 const express = require('express');
 
-const { createPost, getPosts, getPost } = require('../controller/post');
+const {
+    createPost,
+    getPosts,
+    getPost,
+    updatePost,
+    deletePost,
+    PostPhotoUpload
+} = require('../controller/post');
 
 const router = express.Router({ mergeParams: true });
 
@@ -9,8 +16,12 @@ router
     .post(createPost)
     .get(getPosts);
 
-router.route('/:id').get(getPost);
-// .put(updateStaff)
-// .delete(deleteStaff);
+router
+    .route('/:id')
+    .get(getPost)
+    .put(updatePost)
+    .delete(deletePost);
+
+router.route('/:id/photo').put(PostPhotoUpload);
 
 module.exports = router;
