@@ -125,8 +125,6 @@ exports.PostPhotoUpload = asyncHandler(async (req, res, next) => {
     const file = req.files.file;
     data = [];
     if (file.length > 1) {
-        try {
-        } catch {}
         for (let i = 0; i < file.length; i++) {
             if (!file[i].mimetype.startsWith('image')) {
                 return next(new ErrorResponse(`Please upload an image file`, 404));
@@ -155,11 +153,12 @@ exports.PostPhotoUpload = asyncHandler(async (req, res, next) => {
                 await Post.findByIdAndUpdate(req.param.id, {
                     postImage: file[i].name
                 });
-
-                return res.status(200).json({
-                    success: true,
-                    data: data
-                });
+                try {
+                    return res.status(200).json({
+                        success: true,
+                        data: data
+                    });
+                } catch (error) {}
             });
         }
     } else {
