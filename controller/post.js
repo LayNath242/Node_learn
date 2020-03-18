@@ -141,18 +141,24 @@ exports.PostPhotoUpload = asyncHandler(async (req, res, next) => {
             }
 
             // Create custom filename
-            file[i].name = [`photo_${file[i].md5}${path.parse(file[i].name).ext}`];
+            file[i].name = `photo_${file[i].md5}${path.parse(file[i].name).ext}`;
+
+            data.push(file[i].name);
+
             file[i].mv(`${process.env.FILE_UPLOAD_PATH}/${file[i].name}`, async err => {
                 if (err) {
                     console.error(err);
                     return next(new ErrorResponse(`Problem with file upload`, 500));
                 }
-                data.push({
-                    name: file[i].name
-                });
-                await Post.findByIdAndUpdate(req.param.id, {
-                    postImage: file[i].name
-                });
+
+                await Post.findByIdAndUpdate(
+                    req.params.id,
+                    { postImage: data },
+                    {
+                        new: true,
+                        runValidators: true
+                    }
+                );
                 try {
                     return res.status(200).json({
                         success: true,
@@ -185,7 +191,14 @@ exports.PostPhotoUpload = asyncHandler(async (req, res, next) => {
                 return next(new ErrorResponse(`Problem with file upload`, 500));
             }
 
-            await Post.findByIdAndUpdate(req.param.id, { postImage: file.name });
+            await Post.findByIdAndUpdate(
+                req.params.id,
+                { postImage: file.name },
+                {
+                    new: true,
+                    runValidators: true
+                }
+            );
 
             return res.status(200).json({
                 success: true,
