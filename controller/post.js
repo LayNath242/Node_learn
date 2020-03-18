@@ -64,7 +64,7 @@ exports.deletePost = asyncHandler(async (req, res, next) => {
     res.status(200).json({ success: true, data: {} });
 });
 
-exports.PostPhotoUpload = asyncHandler(async (req, res, next) => {
+exports.PostPhotoUploads = asyncHandler(async (req, res, next) => {
     const post = await Post.findById(req.params.id);
     if (!post) {
         return next(
@@ -109,4 +109,91 @@ exports.PostPhotoUpload = asyncHandler(async (req, res, next) => {
             data: file.name
         });
     });
+});
+
+exports.PostPhotoUpload = asyncHandler(async (req, res, next) => {
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+        return next(
+            new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
+        );
+    }
+
+    if (!req.files) {
+        return next(new ErrorResponse(`Please upload a file`, 404));
+    }
+    const file = req.files.file;
+    data = [];
+    if (file.length > 1) {
+        try {
+        } catch {}
+        for (let i = 0; i < file.length; i++) {
+            if (!file[i].mimetype.startsWith('image')) {
+                return next(new ErrorResponse(`Please upload an image file`, 404));
+            }
+
+            // Check filesize
+            if (file[i].size > process.env.MAX_FILE_UPLOAD) {
+                return next(
+                    new ErrorResponse(
+                        `Please upload an image less than ${process.env.MAX_FILE_UPLOAD}`,
+                        404
+                    )
+                );
+            }
+
+            // Create custom filename
+            file[i].name = [`photo_${file[i].md5}${path.parse(file[i].name).ext}`];
+            file[i].mv(`${process.env.FILE_UPLOAD_PATH}/${file[i].name}`, async err => {
+                if (err) {
+                    console.error(err);
+                    return next(new ErrorResponse(`Problem with file upload`, 500));
+                }
+                data.push({
+                    name: file[i].name
+                });
+                await Post.findByIdAndUpdate(req.param.id, {
+                    postImage: file[i].name
+                });
+
+                return res.status(200).json({
+                    success: true,
+                    data: data
+                });
+            });
+        }
+    } else {
+        if (!file.mimetype.startsWith('image')) {
+            return next(new ErrorResponse(`Please upload an image file`, 404));
+        }
+
+        // Check filesize
+        if (file.size > process.env.MAX_FILE_UPLOAD) {
+            return next(
+                new ErrorResponse(
+                    `Please upload an image less than ${process.env.MAX_FILE_UPLOAD}`,
+                    404
+                )
+            );
+        }
+
+        // Create custom filename
+        file.name = [`photo_${file.md5}${path.parse(file.name).ext}`];
+
+        file.mv(`${process.env.FILE_UPLOAD_PATH}/${file.name}`, async err => {
+            if (err) {
+                console.error(err);
+                return next(new ErrorResponse(`Problem with file upload`, 500));
+            }
+
+            await Post.findByIdAndUpdate(req.param.id, { postImage: file.name });
+
+            return res.status(200).json({
+                success: true,
+                data: file.name
+            });
+        });
+    }
+
+    // Make sure the image is a photo
 });
