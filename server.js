@@ -8,9 +8,11 @@ const colors = require('colors');
 
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
+
 const staffs = require('./router/staff');
 const category = require('./router/category');
 const post = require('./router/post');
+const auth = require('./router/auth');
 
 const app = express();
 
@@ -33,6 +35,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/api/v1/staff', staffs);
 app.use('/api/v1/category', category);
 app.use('/api/v1/post', post);
+app.use('/api/v1/auth', auth);
 
 app.use(errorHandler);
 
