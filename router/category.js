@@ -1,4 +1,6 @@
 const express = require('express');
+const advancedResults = require('../middleware/advancedResults');
+const Category = require('../models/Category');
 
 const {
     getAllCategorys,
@@ -19,7 +21,13 @@ router.use('/:categoryId/post', postRouter);
 router
     .route('/')
     .post(createCategory)
-    .get(getAllCategorys);
+    .get(
+        advancedResults(Category, {
+            path: 'post',
+            select: 'postTitle postDescription'
+        }),
+        getAllCategorys
+    );
 
 router
     .route('/:id')

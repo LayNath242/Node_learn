@@ -1,4 +1,6 @@
 const express = require('express');
+const advancedResults = require('../middleware/advancedResults');
+const Staff = require('../models/Staff');
 
 const {
     createStaff,
@@ -17,7 +19,7 @@ router.route('/radius/:zipcode/:distance').get(getStaffInRadius);
 router
     .route('/')
     .post(createStaff)
-    .get(getAllStaffs);
+    .get(advancedResults(Staff), getAllStaffs);
 
 router
     .route('/:id')

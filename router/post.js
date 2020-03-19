@@ -1,4 +1,6 @@
 const express = require('express');
+const advancedResults = require('../middleware/advancedResults');
+const Post = require('../models/Post');
 
 const {
     createPost,
@@ -14,7 +16,13 @@ const router = express.Router({ mergeParams: true });
 router
     .route('/')
     .post(createPost)
-    .get(getPosts);
+    .get(
+        advancedResults(Post, {
+            path: 'category',
+            select: 'cateName cateDescription'
+        }),
+        getPosts
+    );
 
 router
     .route('/:id')
