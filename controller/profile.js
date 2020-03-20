@@ -4,54 +4,58 @@ const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const geocoder = require('../utils/geocoder');
 
-const Staff = require('../models/Staff');
+const Profile = require('../models/Profile');
 
 //------------------------------------------------------------------------
-exports.createStaff = asyncHandler(async (req, res, next) => {
-    const staff = await Staff.create(req.body);
+exports.createProfile = asyncHandler(async (req, res, next) => {
+    req.body.user = req.user.id;
+
+    // const userProfile =
+
+    const profile = await Profile.create(req.body);
     res.status(201).json({
         success: true,
-        data: staff
+        data: profile
     });
 });
 
 //------------------------------------------------------------------------
-exports.getAllStaffs = asyncHandler(async (req, res, next) => {
+exports.getAllProfiles = asyncHandler(async (req, res, next) => {
     return res.status(200).json(res.advancedResults);
 });
 
 //------------------------------------------------------------------------
-exports.getStaff = asyncHandler(async (req, res, next) => {
-    const staff = await Staff.findById(req.params.id);
-    if (!staff) {
-        return next(new ErrorResponse(`Staff not found with id ${req.params.id}`, 404));
+exports.getProfile = asyncHandler(async (req, res, next) => {
+    const profile = await Profile.findById(req.params.id);
+    if (!profile) {
+        return next(new ErrorResponse(`Profile not found with id ${req.params.id}`, 404));
     }
-    res.status(200).json({ success: true, data: staff });
+    res.status(200).json({ success: true, data: profile });
 });
 
 //------------------------------------------------------------------------
-exports.updateStaff = asyncHandler(async (req, res, next) => {
-    const staff = await Staff.findByIdAndUpdate(req.params.id, req.body, {
+exports.updateProfile = asyncHandler(async (req, res, next) => {
+    const profile = await Profile.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
         runValidators: true
     });
-    if (!staff) {
-        return next(new ErrorResponse(`Staff not found with id ${req.params.id}`, 404));
+    if (!profile) {
+        return next(new ErrorResponse(`Profile not found with id ${req.params.id}`, 404));
     }
-    res.status(200).json({ success: true, data: staff });
+    res.status(200).json({ success: true, data: profile });
 });
 
 //------------------------------------------------------------------------
-exports.deleteStaff = asyncHandler(async (req, res, next) => {
-    const staff = await Staff.findByIdAndDelete(req.params.id);
-    if (!staff) {
-        return next(new ErrorResponse(`Staff not found with id ${req.params.id}`, 404));
+exports.deleteProfile = asyncHandler(async (req, res, next) => {
+    const profile = await Profile.findByIdAndDelete(req.params.id);
+    if (!profile) {
+        return next(new ErrorResponse(`Profile not found with id ${req.params.id}`, 404));
     }
     res.status(200).json({ success: true, data: {} });
 });
 
 //------------------------------------------------------------------------
-exports.getStaffInRadius = asyncHandler(async (req, res, next) => {
+exports.getProfileInRadius = asyncHandler(async (req, res, next) => {
     const { zipcode, distance } = req.params;
 
     // Get lat/lng from geocoder
@@ -63,20 +67,20 @@ exports.getStaffInRadius = asyncHandler(async (req, res, next) => {
     // Divide dist by radius of Earth
     // Earth Radius = 3,963 mi / 6,378 km
     const radius = distance / 6378;
-    const staffs = await Staff.find({
+    const profiles = await Profile.find({
         location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } }
     });
 
     res.status(200).json({
         success: true,
-        count: staffs.length,
-        data: staffs
+        count: profiles.length,
+        data: profiles
     });
 });
 
-exports.StaffPhotoUpload = asyncHandler(async (req, res, next) => {
-    const staff = await Staff.findById(req.params.id);
-    if (!staff) {
+exports.ProfilePhotoUpload = asyncHandler(async (req, res, next) => {
+    const profile = await Profile.findById(req.params.id);
+    if (!profile) {
         return next(
             new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404)
         );
@@ -112,7 +116,7 @@ exports.StaffPhotoUpload = asyncHandler(async (req, res, next) => {
             return next(new ErrorResponse(`Problem with file upload`, 500));
         }
 
-        await Staff.findByIdAndUpdate(
+        await Profile.findByIdAndUpdate(
             req.params.id,
             { coverImage: String(file.name) },
             {

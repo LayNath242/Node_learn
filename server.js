@@ -10,7 +10,7 @@ const morgan = require('morgan');
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
 
-const staffs = require('./router/staff');
+const profiles = require('./router/profile');
 const category = require('./router/category');
 const post = require('./router/post');
 const auth = require('./router/auth');
@@ -41,7 +41,7 @@ app.use(fileupload());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //mount route
-app.use('/api/v1/staff', staffs);
+app.use('/api/v1/profile', profiles);
 app.use('/api/v1/category', category);
 app.use('/api/v1/post', post);
 app.use('/api/v1/auth', auth);

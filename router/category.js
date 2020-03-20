@@ -21,12 +21,12 @@ router.use('/:categoryId/post', advancedResults(Category), postRouter);
 
 router
     .route('/')
-    .post(protect, authorize('user', 'admin'), createCategory)
+    .post(protect, authorize('admin'), createCategory)
     .get(getAllCategorys);
 
 router
     .route('/:id')
-    .put(protect, authorize('user', 'admin'), updateCategory)
-    .delete(protect, authorize('user', 'admin'), deleteCategory);
+    .put(protect, authorize('admin'), updateCategory)
+    .delete(protect, authorize('admin'), deleteCategory);
 
 module.exports = router;

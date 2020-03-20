@@ -3,7 +3,7 @@ const slugify = require('slugify');
 
 const geocoder = require('../utils/geocoder');
 
-const StaffSchema = mongoose.Schema(
+const ProfileSchema = mongoose.Schema(
     {
         firstname: {
             type: String,
@@ -73,17 +73,22 @@ const StaffSchema = mongoose.Schema(
         createdAt: {
             type: Date,
             default: Date.now
+        },
+        user: {
+            type: mongoose.Schema.ObjectId,
+            ref: 'User',
+            required: true
         }
     },
     { timestamps: { updatedAt: 'updatedAt' } }
 );
 
-StaffSchema.pre('save', function(next) {
+ProfileSchema.pre('save', function(next) {
     this.slug = slugify(this.firstname + this.lastname, { lower: true });
     next();
 });
 
-StaffSchema.pre('save', async function(next) {
+ProfileSchema.pre('save', async function(next) {
     const loc = await geocoder.geocode(this.address);
     this.location = {
         type: 'Point',
@@ -101,4 +106,4 @@ StaffSchema.pre('save', async function(next) {
 
     next();
 });
-module.exports = mongoose.model('Staff', StaffSchema);
+module.exports = mongoose.model('Profile', ProfileSchema);
