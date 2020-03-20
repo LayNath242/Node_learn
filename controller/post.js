@@ -1,7 +1,9 @@
-const Post = require('../models/Post');
 const path = require('path');
+
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
+
+const Post = require('../models/Post');
 
 exports.createPost = asyncHandler(async (req, res, next) => {
     const post = await Post.create(req.body);

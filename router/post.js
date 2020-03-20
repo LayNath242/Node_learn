@@ -1,4 +1,5 @@
 const express = require('express');
+
 const advancedResults = require('../middleware/advancedResults');
 const Post = require('../models/Post');
 

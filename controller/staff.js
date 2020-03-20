@@ -1,9 +1,10 @@
 const path = require('path');
 
-const Staff = require('../models/Staff');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const geocoder = require('../utils/geocoder');
+
+const Staff = require('../models/Staff');
 
 //------------------------------------------------------------------------
 exports.createStaff = asyncHandler(async (req, res, next) => {
