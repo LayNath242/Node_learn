@@ -12,11 +12,9 @@ const PostSchema = mongoose.Schema(
             required: [true, 'Please add decription for post']
         },
         postImage: [String],
-        category: {
-            type: mongoose.Schema.ObjectId,
-            ref: 'Category',
-            required: true
-        },
+        category: [
+            { type: mongoose.Schema.Types.ObjectId, ref: 'Category', required: true }
+        ],
         createdAt: {
             type: Date,
             default: Date.now

@@ -11,14 +11,10 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
 });
 
 exports.getAllCategorys = asyncHandler(async (req, res, next) => {
-    return res.status(200).json(res.advancedResults);
-});
-
-exports.getCategory = asyncHandler(async (req, res, next) => {
-    const category = await Category.findById(req.params.id).populate('post');
+    const category = await Category.find();
     if (!category) {
         return next(
-            new ErrorResponse(`Category not found with id ${req.params.id}`, 404)
+            new ErrorResponse(`Resourse not found with id ${req.params.id}`, 404)
         );
     }
     res.status(200).json({ success: true, data: category });

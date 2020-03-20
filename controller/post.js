@@ -14,11 +14,7 @@ exports.createPost = asyncHandler(async (req, res, next) => {
 exports.getPosts = asyncHandler(async (req, res, next) => {
     if (req.params.categoryId) {
         const posts = await Post.find({ category: req.params.categoryId });
-        return res.status(200).json({
-            success: true,
-            count: posts.length,
-            data: posts
-        });
+        return res.status(200).json(res.advancedResults);
     } else {
         res.status(200).json(res.advancedResults);
     }
@@ -27,7 +23,7 @@ exports.getPosts = asyncHandler(async (req, res, next) => {
 exports.getPost = asyncHandler(async (req, res, next) => {
     const post = await Post.findById(req.params.id).populate({
         path: 'category',
-        select: 'cateName cateDescription -_id'
+        select: 'cateName cateDescription'
     });
     if (!post) {
         return next(
@@ -199,6 +195,4 @@ exports.PostPhotoUpload = asyncHandler(async (req, res, next) => {
             });
         });
     }
-
-    // Make sure the image is a photo
 });
