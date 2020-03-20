@@ -1,6 +1,6 @@
 const express = require('express');
 
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 const advancedResults = require('../middleware/advancedResults');
 const Category = require('../models/Category');
 
@@ -21,12 +21,12 @@ router.use('/:categoryId/post', advancedResults(Category), postRouter);
 
 router
     .route('/')
-    .post(protect, createCategory)
+    .post(protect, authorize('user', 'admin'), createCategory)
     .get(getAllCategorys);
 
 router
     .route('/:id')
-    .put(protect, updateCategory)
-    .delete(protect, deleteCategory);
+    .put(protect, authorize('user', 'admin'), updateCategory)
+    .delete(protect, authorize('user', 'admin'), deleteCategory);
 
 module.exports = router;

@@ -13,9 +13,9 @@ exports.protect = asyncHandler(async (req, res, next) => {
     }
 
     // Set token from cookie
-    // else if (req.cookies.token) {
-    //     token = req.cookies.token;
-    // }
+    else if (req.cookies.token) {
+        token = req.cookies.token;
+    }
 
     // Make sure token exists
     if (!token) {
@@ -24,9 +24,6 @@ exports.protect = asyncHandler(async (req, res, next) => {
 
     try {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-        console.log(decoded);
-
         req.user = await User.findById(decoded.id);
         next();
     } catch (err) {
@@ -35,16 +32,19 @@ exports.protect = asyncHandler(async (req, res, next) => {
 });
 
 // Grant access to specific roles
-// exports.authorize = (...roles) => {
-//     return (req, res, next) => {
-//         if (!roles.includes(req.user.role)) {
-//             return next(
-//                 new ErrorResponse(
-//                     `User role ${req.user.role} is not authorized to access this route`,
-//                     403
-//                 )
-//             );
-//         }
-//         next();
-//     };
-// };
+exports.authorize = (...roles) => {
+    return (req, res, next) => {
+        if (req.user.is_active == false) {
+            return next(new ErrorResponse(`User have been delete`, 400));
+        }
+        if (!roles.includes(req.user.role)) {
+            return next(
+                new ErrorResponse(
+                    `User role ${req.user.role} is not authorized to access this route`,
+                    403
+                )
+            );
+        }
+        next();
+    };
+};
