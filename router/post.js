@@ -1,5 +1,6 @@
 const express = require('express');
 
+const { protect } = require('../middleware/auth');
 const advancedResults = require('../middleware/advancedResults');
 const Post = require('../models/Post');
 
@@ -16,7 +17,7 @@ const router = express.Router({ mergeParams: true });
 
 router
     .route('/')
-    .post(createPost)
+    .post(protect, createPost)
     .get(
         advancedResults(Post, {
             path: 'category',
@@ -28,9 +29,9 @@ router
 router
     .route('/:id')
     .get(getPost)
-    .put(updatePost)
-    .delete(deletePost);
+    .put(protect, updatePost)
+    .delete(protect, deletePost);
 
-router.route('/:id/photo').put(PostPhotoUpload);
+router.route('/:id/photo').put(protect, PostPhotoUpload);
 
 module.exports = router;

@@ -1,6 +1,7 @@
 const express = require('express');
 
 const advancedResults = require('../middleware/advancedResults');
+const { protect } = require('../middleware/auth');
 const Staff = require('../models/Staff');
 
 const {
@@ -19,15 +20,15 @@ router.route('/radius/:zipcode/:distance').get(getStaffInRadius);
 
 router
     .route('/')
-    .post(createStaff)
+    .post(protect, createStaff)
     .get(advancedResults(Staff), getAllStaffs);
 
 router
     .route('/:id')
     .get(getStaff)
-    .put(updateStaff)
-    .delete(deleteStaff);
+    .put(protect, updateStaff)
+    .delete(protect, deleteStaff);
 
-router.route('/:id/photo').patch(StaffPhotoUpload);
+router.route('/:id/photo').patch(protect, StaffPhotoUpload);
 
 module.exports = router;
