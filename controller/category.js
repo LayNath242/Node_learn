@@ -13,11 +13,6 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
 
 exports.getAllCategorys = asyncHandler(async (req, res, next) => {
     const category = await Category.find();
-    if (!category) {
-        return next(
-            new ErrorResponse(`Resourse not found with id ${req.params.id}`, 404)
-        );
-    }
     res.status(200).json({ success: true, data: category });
 });
 

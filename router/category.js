@@ -17,7 +17,7 @@ const postRouter = require('./post');
 const router = express.Router({ mergeParams: true });
 
 //re-route to other resource router
-router.use('/:categoryId/post', advancedResults(Category), postRouter);
+router.use('/:categoryId/post', postRouter);
 
 router
     .route('/')

@@ -21,7 +21,7 @@ router.route('/radius/:zipcode/:distance').get(getProfileInRadius);
 router
     .route('/')
     .post(protect, authorize('user', 'admin'), createProfile)
-    .get(protect, authorize('admin'), advancedResults(Profile), getAllProfiles);
+    .get(protect, advancedResults(Profile), getAllProfiles);
 
 router
     .route('/:id')
@@ -29,6 +29,6 @@ router
     .put(protect, authorize('user', 'admin'), updateProfile)
     .delete(protect, authorize('user', 'admin'), deleteProfile);
 
-router.route('/:id/photo').patch(protect, authorize('user', 'admin'), ProfilePhotoUpload);
+router.route('/:id/photo').put(protect, authorize('user', 'admin'), ProfilePhotoUpload);
 
 module.exports = router;
