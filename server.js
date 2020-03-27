@@ -2,6 +2,8 @@ const path = require('path');
 const dotenv = require('dotenv');
 const colors = require('colors');
 const cookieParser = require('cookie-parser');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
 
 const express = require('express');
 const fileupload = require('express-fileupload');
@@ -14,6 +16,7 @@ const profiles = require('./router/profile');
 const category = require('./router/category');
 const post = require('./router/post');
 const auth = require('./router/auth');
+const user = require('./router/user');
 
 const app = express();
 
@@ -37,6 +40,12 @@ connectDB();
 //use upload
 app.use(fileupload());
 
+// Sanitize data prevent no js "email": {"$gt":""},
+app.use(mongoSanitize());
+
+// set security header
+app.use(helmet());
+
 //static route
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -45,6 +54,7 @@ app.use('/api/v1/profile', profiles);
 app.use('/api/v1/category', category);
 app.use('/api/v1/post', post);
 app.use('/api/v1/auth', auth);
+app.use('/api/v1/admin', user);
 
 //handle error
 app.use(errorHandler);
