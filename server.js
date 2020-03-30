@@ -2,8 +2,13 @@ const path = require('path');
 const dotenv = require('dotenv');
 const colors = require('colors');
 const cookieParser = require('cookie-parser');
+
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
+const xss = require('xss-clean');
+const rateLimit = require('express-rate-limit');
+const hpp = require('hpp');
+const cors = require('cors');
 
 const express = require('express');
 const fileupload = require('express-fileupload');
@@ -45,6 +50,23 @@ app.use(mongoSanitize());
 
 // set security header
 app.use(helmet());
+
+//prevent xss attacks
+app.use(xss());
+
+//rate limiting
+const limiter = rateLimit({
+    windowMs: 10 * 60 * 1000, //10 min
+    max: 100
+});
+
+app.use(limiter);
+
+//prevent http praram pollution
+app.use(hpp());
+
+//enable cors
+app.use(cors());
 
 //static route
 app.use(express.static(path.join(__dirname, 'public')));
